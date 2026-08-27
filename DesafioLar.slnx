@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="DesafioLar.Application/DesafioLar.Application.csproj" Id="31a4c815-014e-4107-9617-a2fdf3ef6d0d" />
+  <Project Path="DesafioLar.Domain/DesafioLar.Domain.csproj" Id="e9999aa2-dd3c-4968-ad45-823a788a176c" />
+  <Project Path="DesafioLar.Infrastructure/DesafioLar.Infrastructure.csproj" Id="0276c4ca-a28b-49b1-8689-9ce67081d079" />
+  <Project Path="DesafioLar/DesafioLar.csproj" />
+</Solution>
