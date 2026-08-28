@@ -1,70 +1,29 @@
-# Desafio Lar
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
-Aplicação desenvolvida como parte do desafio técnico da Lar.
+WORKDIR /src
 
-O projeto consiste em uma aplicação para gerenciamento de pessoas e seus respectivos telefones, permitindo realizar operações de cadastro, consulta, atualização e exclusão.
+COPY ["DesafioLar/DesafioLar.csproj", "DesafioLar/"]
+COPY ["DesafioLar.Application/DesafioLar.Application.csproj", "DesafioLar.Application/"]
+COPY ["DesafioLar.Domain/DesafioLar.Domain.csproj", "DesafioLar.Domain/"]
+COPY ["DesafioLar.Infrastructure/DesafioLar.Infrastructure.csproj", "DesafioLar.Infrastructure/"]
 
-O backend foi desenvolvido utilizando **.NET 10 / ASP.NET Core Web API**, com **Entity Framework Core** para persistência dos dados e **PostgreSQL** como banco de dados.
+RUN dotnet restore "DesafioLar/DesafioLar.csproj"
 
-A aplicação segue uma organização baseada em **Clean Architecture**, utilizando princípios de **DDD** e **SOLID**, com separação entre domínio, aplicação, infraestrutura e apresentação.
+COPY . .
 
-## Tecnologias
+WORKDIR "/src/DesafioLar"
 
-- .NET 10
-- ASP.NET Core Web API
-- Entity Framework Core
-- PostgreSQL
-- Swagger
-- C#
-- Clean Architecture
-- DDD
-- SOLID
+RUN dotnet publish "DesafioLar.csproj" \
+    -c Release \
+    -o /app/publish \
+    --no-restore
 
-## Como executar
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 
-### Pré-requisitos
+WORKDIR /app
 
-- .NET 10 SDK
-- PostgreSQL
-- Visual Studio 2022 ou superior
+COPY --from=build /app/publish .
 
-### Banco de dados
+EXPOSE 8080
 
-Crie um banco PostgreSQL chamado:
-
-**desafiolardb**
-
-A aplicação utiliza:
-
-- **Host:** localhost
-- **Porta:** 5432
-- **Database:** desafiolardb
-- **Username:** postgres
-
-A senha do banco deve ser configurada através do **.NET User Secrets**.
-
-Na pasta do projeto `DesafioLar`, execute:
-
-    dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=desafiolardb;Username=postgres;Password=SUA_SENHA"
-
-### Executar as migrations
-
-No Visual Studio, abra o **Package Manager Console**:
-
-**Ferramentas → Gerenciador de Pacotes do NuGet → Console do Gerenciador de Pacotes**
-
-Selecione `DesafioLar.Infrastructure` como projeto padrão e execute:
-
-    Update-Database
-
-### Executar a aplicação
-
-Abra a solução:
-
-**DesafioLar.slnx**
-
-Defina o projeto `DesafioLar` como projeto de inicialização e execute a aplicação pelo Visual Studio (`F5`).
-
-Após iniciar, a documentação da API estará disponível através do Swagger:
-
-**https://localhost:7196/swagger**
+ENTRYPOINT ["dotnet", "DesafioLar.dll"]
