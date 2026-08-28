@@ -1,0 +1,40 @@
+services:
+
+  database:
+    image: postgres:17
+    container_name: desafiolar-database
+    environment:
+      POSTGRES_DB: desafiolardb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: DesafioLar/Dockerfile
+    container_name: desafiolar-backend
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Host=database;Port=5432;Database=desafiolardb;Username=postgres;Password=postgres
+    ports:
+      - "5276:8080"
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: ./frontend/DesafioLar.Web
+      dockerfile: Dockerfile
+    container_name: desafiolar-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

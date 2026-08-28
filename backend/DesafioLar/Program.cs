@@ -31,6 +31,15 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Aplica automaticamente as migrations pendentes
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<AppDbContext>();
+
+    await dbContext.Database.MigrateAsync();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

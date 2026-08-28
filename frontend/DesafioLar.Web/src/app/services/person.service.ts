@@ -12,7 +12,7 @@ export class PersonService {
 
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://localhost:7196/api/Person';
+  private readonly apiUrl = 'http://localhost:5276/api/Person';
 
   getAll(): Observable<Person[]> {
     return this.http.get<Person[]>(this.apiUrl);

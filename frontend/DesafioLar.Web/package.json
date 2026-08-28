@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "start:backend": "dotnet run --project ../../backend/DesafioLar/DesafioLar.csproj --launch-profile https",
+    "start:all": "concurrently \"npm run start\" \"npm run start:backend\""
   },
   "private": true,
   "packageManager": "npm@12.0.2",
@@ -26,6 +28,7 @@
     "@angular/build": "^21.2.22",
     "@angular/cli": "^21.2.22",
     "@angular/compiler-cli": "^21.2.0",
+    "concurrently": "^10.0.5",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",
