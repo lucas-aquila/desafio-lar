@@ -1,0 +1,120 @@
+.page {
+  padding: 32px 48px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+mat-card {
+  background: var(--lar-white);
+  border: 1px solid var(--lar-border);
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+mat-card-header {
+  margin-bottom: 24px;
+}
+
+mat-card-title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+mat-card-content {
+  padding-top: 8px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+/* Telefones */
+
+.phones-card {
+  margin-top: 24px;
+}
+
+.section-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-header p {
+  margin: 4px 0 0;
+  color: #757575;
+  font-size: 14px;
+}
+
+.phone-row {
+  display: grid;
+  grid-template-columns: 220px 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.phone-number {
+  width: 100%;
+}
+
+.remove-phone-button {
+  margin-bottom: 22px;
+}
+
+.empty-phones {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 80px;
+  color: #757575;
+}
+
+/* Ações */
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.primary-button {
+  background-color: var(--lar-red) !important;
+  color: var(--lar-white) !important;
+
+  &:hover {
+    background-color: var(--lar-red-dark) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 24px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header {
+    align-items: flex-start;
+    gap: 16px;
+    flex-direction: column;
+  }
+
+  .phone-row {
+    grid-template-columns: 1fr auto;
+  }
+
+  .phone-row mat-form-field:first-child {
+    grid-column: 1 / -1;
+  }
+}

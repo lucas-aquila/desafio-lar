@@ -1,0 +1,56 @@
+.app-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  background: var(--lar-red);
+  color: var(--lar-white);
+  padding: 0 32px;
+  height: 64px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+.app-title {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.app-menu {
+  display: flex;
+  height: 100%;
+  margin-left: 40px;
+
+  a {
+    position: relative;
+    height: 100%;
+    border-radius: 0;
+    color: var(--lar-white);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  a:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  a.active {
+    color: var(--lar-white);
+  }
+
+  a.active::after {
+    content: '';
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 0;
+    height: 3px;
+    background: var(--lar-white);
+  }
+}
+
+.app-content {
+  min-height: 100vh;
+  padding-top: 64px;
+}

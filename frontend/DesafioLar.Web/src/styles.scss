@@ -1,0 +1,59 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+:root {
+  --lar-red: #f32d3d;
+  --lar-red-dark: #d92332;
+  --lar-dark: #222222;
+  --lar-text: #424242;
+  --lar-white: #ffffff;
+  --lar-background: #f5f5f5;
+  --lar-border: #e0e0e0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--lar-background);
+  color: var(--lar-text);
+  font-family: Roboto, Arial, sans-serif;
+}
+
+.cdk-overlay-container .success-snackbar .mdc-snackbar__surface {
+  background-color: #2e7d32 !important;
+}
+
+.cdk-overlay-container .success-snackbar .mdc-snackbar__label {
+  color: white !important;
+}
+
+.cdk-overlay-container .error-snackbar .mdc-snackbar__surface {
+  background-color: #c62828 !important;
+}
+
+.cdk-overlay-container .error-snackbar .mdc-snackbar__label {
+  color: white !important;
+}
+
+.cdk-overlay-container .success-snackbar .mat-mdc-snack-bar-action,
+.cdk-overlay-container .error-snackbar .mat-mdc-snack-bar-action {
+  color: white !important;
+}

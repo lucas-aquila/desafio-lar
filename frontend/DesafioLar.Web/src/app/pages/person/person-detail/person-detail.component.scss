@@ -1,0 +1,151 @@
+.page {
+  padding: 32px 48px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+mat-card {
+  background: var(--lar-white);
+  border: 1px solid var(--lar-border);
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+mat-card-header {
+  margin-bottom: 24px;
+}
+
+mat-card-title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+mat-card-content {
+  padding-top: 8px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  color: #757575;
+  font-size: 13px;
+}
+
+.value {
+  color: var(--lar-text);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.phones-card {
+  margin-top: 24px;
+}
+
+.phones-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.phone-item {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--lar-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.phone-type {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+
+  mat-icon {
+    color: var(--lar-red);
+  }
+}
+
+.phone-number {
+  color: var(--lar-text);
+}
+
+.empty-state {
+  padding: 32px;
+  text-align: center;
+  color: #757575;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.remove-button {
+  background-color: var(--lar-red) !important;
+  color: var(--lar-white) !important;
+
+  &:hover {
+    background-color: var(--lar-red-dark) !important;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .page {
+    padding: 24px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .phone-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .actions {
+    justify-content: stretch;
+
+    button {
+      flex: 1;
+    }
+  }
+}
+
+.loading {
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  color: #757575;
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+}

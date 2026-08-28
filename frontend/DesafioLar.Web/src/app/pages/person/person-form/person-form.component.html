@@ -1,0 +1,202 @@
+<div class="page">
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+
+    <!-- Dados pessoais -->
+    <mat-card>
+
+      <mat-card-header>
+        <mat-card-title>Dados pessoais</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+
+        <div class="form-grid">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nome</mat-label>
+
+            <input
+              matInput
+              formControlName="name">
+
+            @if (form.controls.name.hasError('required')) {
+              <mat-error>
+                Nome é obrigatório
+              </mat-error>
+            }
+
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline">
+            <mat-label>CPF</mat-label>
+
+            <input
+              matInput
+              formControlName="cpf">
+
+            @if (form.controls.cpf.hasError('required')) {
+              <mat-error>
+                CPF é obrigatório
+              </mat-error>
+            }
+
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data de nascimento</mat-label>
+
+            <input
+              matInput
+              type="date"
+              formControlName="birthDate">
+
+            @if (form.controls.birthDate.hasError('required')) {
+              <mat-error>
+                Data de nascimento é obrigatória
+              </mat-error>
+            }
+
+          </mat-form-field>
+
+        </div>
+
+      </mat-card-content>
+
+    </mat-card>
+
+
+    <!-- Telefones -->
+    <mat-card class="phones-card">
+
+      <mat-card-header>
+
+        <div class="section-header">
+
+          <div>
+            <mat-card-title>Telefones</mat-card-title>
+            <p>Adicione os telefones da pessoa</p>
+          </div>
+
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="addPhone()">
+
+            <mat-icon>add</mat-icon>
+            Adicionar telefone
+
+          </button>
+
+        </div>
+
+      </mat-card-header>
+
+
+      <mat-card-content>
+
+        <div formArrayName="phones">
+
+          @for (phone of phones.controls; track $index; let i = $index) {
+
+            <div
+              class="phone-row"
+              [formGroupName]="i">
+
+              <mat-form-field appearance="outline">
+
+                <mat-label>Tipo</mat-label>
+
+                <mat-select formControlName="type">
+
+                  @for (phoneType of phoneTypes; track phoneType.value) {
+
+                    <mat-option [value]="phoneType.value">
+                      {{ phoneType.label }}
+                    </mat-option>
+
+                  }
+
+                </mat-select>
+
+              </mat-form-field>
+
+
+              <mat-form-field
+                appearance="outline"
+                class="phone-number">
+
+                <mat-label>Número</mat-label>
+
+                <input
+                  matInput
+                  formControlName="number"
+                  placeholder="Ex.: (41) 98888-7777">
+
+                @if (phone.get('number')?.hasError('required')) {
+                  <mat-error>
+                    Número é obrigatório
+                  </mat-error>
+                }
+
+              </mat-form-field>
+
+
+              <button
+                mat-icon-button
+                type="button"
+                class="remove-phone-button"
+                aria-label="Remover telefone"
+                (click)="removePhone(i)">
+
+                <mat-icon>delete</mat-icon>
+
+              </button>
+
+            </div>
+
+          }
+
+          @if (phones.length === 0) {
+
+            <div class="empty-phones">
+              <mat-icon>phone</mat-icon>
+              <span>Nenhum telefone adicionado.</span>
+            </div>
+
+          }
+
+        </div>
+
+      </mat-card-content>
+
+    </mat-card>
+
+
+    <div class="actions">
+
+      <button
+        mat-button
+        type="button"
+        routerLink="/person">
+
+        Cancelar
+
+      </button>
+
+      <button
+        mat-flat-button
+        type="submit"
+        class="primary-button">
+
+        Salvar
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

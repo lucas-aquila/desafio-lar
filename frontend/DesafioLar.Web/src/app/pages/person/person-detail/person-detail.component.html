@@ -1,0 +1,148 @@
+<div class="page">
+
+  @if (loading()) {
+
+    <div class="loading">
+      <mat-icon>hourglass_empty</mat-icon>
+      <span>Carregando dados da pessoa...</span>
+    </div>
+
+  } @else if (person(); as person) {
+
+    <div class="page-header">
+
+      <div>
+        <h1>Detalhes da pessoa</h1>
+        <p>Visualize os dados cadastrados</p>
+      </div>
+
+    </div>
+
+
+    <mat-card>
+
+      <mat-card-header>
+        <mat-card-title>Dados pessoais</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+
+        <div class="details-grid">
+
+          <div class="detail-item">
+            <span class="label">Nome</span>
+            <span class="value">{{ person.name }}</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="label">CPF</span>
+            <span class="value">{{ person.cpf }}</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="label">Data de nascimento</span>
+            <span class="value">
+              {{ person.birthDate | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <span class="label">Status</span>
+            <span class="value">
+              {{ person.isActive ? 'Ativo' : 'Inativo' }}
+            </span>
+          </div>
+
+        </div>
+
+      </mat-card-content>
+
+    </mat-card>
+
+
+    <mat-card class="phones-card">
+
+      <mat-card-header>
+        <mat-card-title>Telefones</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+
+        @if (person.phones.length > 0) {
+
+          <div class="phones-list">
+
+            @for (phone of person.phones; track phone.id) {
+
+              <div class="phone-item">
+
+                <div class="phone-type">
+                  <mat-icon>phone</mat-icon>
+                  {{ getPhoneTypeLabel(phone.type) }}
+                </div>
+
+                <div class="phone-number">
+                  {{ formatPhoneNumber(phone.number) }}
+                </div>
+
+              </div>
+
+            }
+
+          </div>
+
+        } @else {
+
+          <div class="empty-state">
+            Nenhum telefone cadastrado.
+          </div>
+
+        }
+
+      </mat-card-content>
+
+    </mat-card>
+
+
+    <div class="actions">
+
+      <button
+        mat-button
+        routerLink="/person">
+
+        Voltar
+
+      </button>
+
+      <button
+        mat-stroked-button
+        type="button"
+        [routerLink]="['/person', person.id, 'edit']">
+
+        <mat-icon>edit</mat-icon>
+        Editar
+
+      </button>
+
+      <button
+        mat-flat-button
+        class="remove-button"
+        type="button"
+        (click)="remove()">
+
+        <mat-icon>delete</mat-icon>
+        Remover
+
+      </button>
+
+    </div>
+
+  } @else {
+
+    <div class="empty-state">
+      Não foi possível carregar os dados da pessoa.
+    </div>
+
+  }
+
+</div>
