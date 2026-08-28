@@ -13,10 +13,7 @@ COPY . .
 
 WORKDIR "/src/DesafioLar"
 
-RUN dotnet publish "DesafioLar.csproj" \
-    -c Release \
-    -o /app/publish \
-    --no-restore
+RUN dotnet publish "DesafioLar.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 
