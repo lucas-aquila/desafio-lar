@@ -1,19 +1,34 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
+import {
+  MatDialog,
+  MatDialogModule
+} from '@angular/material/dialog';
+
 import {
   MatSnackBar,
   MatSnackBarModule
 } from '@angular/material/snack-bar';
 
+import {
+  MatPaginator,
+  PageEvent
+} from '@angular/material/paginator';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 import { PersonService } from '../../../services/person.service';
 import { Person } from '../../../models/person';
+
 import {
   ConfirmDialogComponent
 } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -22,11 +37,15 @@ import {
   selector: 'app-person-list',
   imports: [
     RouterLink,
+    FormsModule,
     MatTableModule,
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatPaginator,
+    MatFormFieldModule,
+    MatInputModule,
     DatePipe
   ],
   templateUrl: './person-list.component.html',
@@ -48,25 +67,78 @@ export class PersonListComponent implements OnInit {
     'actions'
   ];
 
+  searchName = '';
+
+  page = 1;
+
+  pageSize = 10;
+
+  totalItems = 0;
+
   ngOnInit(): void {
     this.loadPerson();
   }
 
-  private loadPerson(): void {
+  loadPerson(): void {
 
-    this.personService.getAll().subscribe({
+    this.personService.getAll(
+      this.searchName,
+      this.page,
+      this.pageSize
+    ).subscribe({
 
-      next: people => {
-        this.person.data = people;
+      next: result => {
+
+        this.person.data = result.items;
+
+        this.totalItems = result.totalItems;
+
       },
 
       error: error => {
+
         console.error(
           'Erro ao carregar pessoas:',
           error
         );
+
+        this.snackBar.open(
+          'Não foi possível carregar as pessoas.',
+          'Fechar',
+          {
+            duration: 4000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            panelClass: ['error-snackbar']
+          }
+        );
       }
     });
+  }
+
+  search(): void {
+
+    this.page = 1;
+
+    this.loadPerson();
+  }
+
+  clearSearch(): void {
+
+    this.searchName = '';
+
+    this.page = 1;
+
+    this.loadPerson();
+  }
+
+  onPageChange(event: PageEvent): void {
+
+    this.page = event.pageIndex + 1;
+
+    this.pageSize = event.pageSize;
+
+    this.loadPerson();
   }
 
   formatCpf(cpf: string): string {
@@ -121,10 +193,6 @@ export class PersonListComponent implements OnInit {
 
       next: () => {
 
-        this.person.data = this.person.data.filter(
-          item => item.id !== person.id
-        );
-
         this.snackBar.open(
           'Pessoa removida com sucesso!',
           'Fechar',
@@ -135,6 +203,8 @@ export class PersonListComponent implements OnInit {
             panelClass: ['success-snackbar']
           }
         );
+
+        this.loadPerson();
       },
 
       error: error => {

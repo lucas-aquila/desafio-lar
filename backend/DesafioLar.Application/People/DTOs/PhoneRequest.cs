@@ -1,14 +1,26 @@
 ﻿using DesafioLar.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 
-namespace DesafioLar.Application.People.DTOs
+namespace DesafioLar.Application.People.DTOs;
+
+public class PhoneRequest
 {
-    public class PhoneRequest
-    {
-        public PhoneType Type { get; set; }
+    [Required(
+        ErrorMessage = "Tipo do telefone é obrigatório."
+    )]
+    public PhoneType Type { get; set; }
 
-        public string Number { get; set; } = string.Empty;
-    }
+    [Required(
+        ErrorMessage = "Número do telefone é obrigatório."
+    )]
+    [StringLength(
+        11,
+        MinimumLength = 10,
+        ErrorMessage = "Telefone deve conter 10 ou 11 dígitos."
+    )]
+    [RegularExpression(
+        @"^\d{10,11}$",
+        ErrorMessage = "Telefone deve conter apenas números, com 10 ou 11 dígitos."
+    )]
+    public string Number { get; set; } = string.Empty;
 }

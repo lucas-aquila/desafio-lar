@@ -27,12 +27,42 @@ namespace DesafioLar.Infrastructure.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<List<Person>> GetAllAsync()
+        public async Task<List<Person>> GetAllAsync(
+            string? name,
+            int page,
+            int pageSize)
         {
-            return await _context.People
+            var query = _context.People
                 .Where(p => p.IsActive)
                 .Include(p => p.Phones)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                query = query.Where(p =>
+                    p.Name.ToLower().Contains(name.ToLower()));
+            }
+
+            return await query
+                .OrderBy(p => p.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+        }
+
+        public async Task<int> CountAsync(string? name)
+        {
+            var query = _context.People
+                .Where(p => p.IsActive)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                query = query.Where(p =>
+                    p.Name.ToLower().Contains(name.ToLower()));
+            }
+
+            return await query.CountAsync();
         }
 
         public void Update(Person person)

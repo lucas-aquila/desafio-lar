@@ -8,11 +8,18 @@ namespace DesafioLar.Application.People.Interfaces
 
         Task<Person?> GetByIdAsync(int id);
 
-        Task<List<Person>> GetAllAsync();
+        Task<List<Person>> GetAllAsync(
+            string? name,
+            int page,
+            int pageSize);
+
+        Task<int> CountAsync(string? name);
 
         void Update(Person person);
 
-        Task<bool> ExistsByCpfAsync(string cpf, int? personId = null);
+        Task<bool> ExistsByCpfAsync(
+            string cpf,
+            int? personId = null);
 
         Task SaveChangesAsync();
     }

@@ -95,14 +95,19 @@ export class PersonFormComponent implements OnInit {
 
     name: [
       '',
-      Validators.required
+      [
+        Validators.required,
+        Validators.maxLength(150)
+      ]
     ],
 
     cpf: [
       '',
       [
         Validators.required,
-        Validators.pattern(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/)
+        Validators.pattern(
+          /^\d{3}\.\d{3}\.\d{3}-\d{2}$/
+        )
       ]
     ],
 
@@ -110,7 +115,9 @@ export class PersonFormComponent implements OnInit {
       '',
       [
         Validators.required,
-        Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)
+        Validators.pattern(
+          /^\d{4}-\d{2}-\d{2}$/
+        )
       ]
     ],
 
@@ -133,7 +140,6 @@ export class PersonFormComponent implements OnInit {
     } else {
 
       this.addPhone();
-
     }
   }
 
@@ -157,10 +163,11 @@ export class PersonFormComponent implements OnInit {
         number,
         [
           Validators.required,
-          Validators.pattern(/^\(\d{2}\) \d{4,5}-\d{4}$/)
+          Validators.pattern(
+            /^\(\d{2}\) \d{4,5}-\d{4}$/
+          )
         ]
       ]
-
     });
   }
 
@@ -174,10 +181,11 @@ export class PersonFormComponent implements OnInit {
 
           name: person.name,
 
-          cpf: this.formatCpf(person.cpf),
+          cpf: this.formatCpf(
+            person.cpf
+          ),
 
           birthDate: person.birthDate
-
         });
 
         this.phones.clear();
@@ -185,16 +193,15 @@ export class PersonFormComponent implements OnInit {
         person.phones.forEach(phone => {
 
           this.phones.push(
-
             this.createPhone(
               phone.type,
-              this.formatPhone(phone.number)
+              this.formatPhone(
+                phone.number
+              )
             )
-
           );
 
         });
-
       },
 
       error: error => {
@@ -216,9 +223,7 @@ export class PersonFormComponent implements OnInit {
         );
 
         this.router.navigate(['/person']);
-
       }
-
     });
   }
 
@@ -227,27 +232,26 @@ export class PersonFormComponent implements OnInit {
     this.phones.push(
       this.createPhone()
     );
-
   }
 
   removePhone(index: number): void {
 
     this.phones.removeAt(index);
-
   }
 
   formatCpfInput(event: Event): void {
 
-    const input = event.target as HTMLInputElement;
+    const input =
+      event.target as HTMLInputElement;
 
-    const formattedCpf = this.formatCpf(input.value);
+    const formattedCpf =
+      this.formatCpf(input.value);
 
     input.value = formattedCpf;
 
     this.form.controls.cpf.setValue(
       formattedCpf
     );
-
   }
 
   private formatCpf(cpf: string): string {
@@ -263,17 +267,14 @@ export class PersonFormComponent implements OnInit {
     if (value.length <= 6) {
 
       return `${value.substring(0, 3)}.${value.substring(3)}`;
-
     }
 
     if (value.length <= 9) {
 
       return `${value.substring(0, 3)}.${value.substring(3, 6)}.${value.substring(6)}`;
-
     }
 
     return `${value.substring(0, 3)}.${value.substring(3, 6)}.${value.substring(6, 9)}-${value.substring(9)}`;
-
   }
 
   formatPhoneInput(
@@ -281,11 +282,11 @@ export class PersonFormComponent implements OnInit {
     index: number
   ): void {
 
-    const input = event.target as HTMLInputElement;
+    const input =
+      event.target as HTMLInputElement;
 
-    const formattedPhone = this.formatPhone(
-      input.value
-    );
+    const formattedPhone =
+      this.formatPhone(input.value);
 
     input.value = formattedPhone;
 
@@ -294,7 +295,6 @@ export class PersonFormComponent implements OnInit {
       .controls
       .number
       .setValue(formattedPhone);
-
   }
 
   private formatPhone(phone: string): string {
@@ -310,35 +310,34 @@ export class PersonFormComponent implements OnInit {
     if (value.length <= 6) {
 
       return `(${value.substring(0, 2)}) ${value.substring(2)}`;
-
     }
 
     if (value.length <= 10) {
 
       return `(${value.substring(0, 2)}) ${value.substring(2, 6)}-${value.substring(6)}`;
-
     }
 
     return `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7)}`;
-
   }
 
   private getToday(): string {
 
     const today = new Date();
 
-    const year = today.getFullYear();
+    const year =
+      today.getFullYear();
 
-    const month = String(
-      today.getMonth() + 1
-    ).padStart(2, '0');
+    const month =
+      String(
+        today.getMonth() + 1
+      ).padStart(2, '0');
 
-    const day = String(
-      today.getDate()
-    ).padStart(2, '0');
+    const day =
+      String(
+        today.getDate()
+      ).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
-
   }
 
   save(): void {
@@ -350,28 +349,31 @@ export class PersonFormComponent implements OnInit {
       return;
     }
 
-    const formValue = this.form.getRawValue();
+    const formValue =
+      this.form.getRawValue();
 
     const data: RequestPerson = {
 
       name: formValue.name,
 
-      cpf: formValue.cpf.replace(/\D/g, ''),
+      cpf: formValue.cpf.replace(
+        /\D/g,
+        ''
+      ),
 
       birthDate: formValue.birthDate,
 
       phones: formValue.phones.map(
-
         (phone): RequestPhone => ({
 
           type: phone.type,
 
-          number: phone.number.replace(/\D/g, '')
-
+          number: phone.number.replace(
+            /\D/g,
+            ''
+          )
         })
-
       )
-
     };
 
     if (this.isEditMode()) {
@@ -384,47 +386,52 @@ export class PersonFormComponent implements OnInit {
     this.create(data);
   }
 
-  private create(data: RequestPerson): void {
+  private create(
+    data: RequestPerson
+  ): void {
 
-    this.personService.create(data).subscribe({
+    this.personService
+      .create(data)
+      .subscribe({
 
-      next: () => {
+        next: () => {
 
-        this.snackBar.open(
-          'Pessoa cadastrada com sucesso!',
-          'Fechar',
-          {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            panelClass: ['success-snackbar']
-          }
-        );
+          this.snackBar.open(
+            'Pessoa cadastrada com sucesso!',
+            'Fechar',
+            {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              panelClass: ['success-snackbar']
+            }
+          );
 
-        this.router.navigate(['/person']);
+          this.router.navigate([
+            '/person'
+          ]);
+        },
 
-      },
+        error: error => {
 
-      error: error => {
+          console.error(
+            'Erro ao cadastrar pessoa:',
+            error
+          );
 
-        console.error(
-          'Erro ao cadastrar pessoa:',
-          error
-        );
-
-        this.showError(
-          this.getErrorMessage(
-            error,
-            'Não foi possível cadastrar a pessoa.'
-          )
-        );
-
-      }
-
-    });
+          this.showError(
+            this.getErrorMessage(
+              error,
+              'Não foi possível cadastrar a pessoa.'
+            )
+          );
+        }
+      });
   }
 
-  private update(data: RequestPerson): void {
+  private update(
+    data: RequestPerson
+  ): void {
 
     const id = this.personId();
 
@@ -432,45 +439,44 @@ export class PersonFormComponent implements OnInit {
       return;
     }
 
-    this.personService.update(id, data).subscribe({
+    this.personService
+      .update(id, data)
+      .subscribe({
 
-      next: () => {
+        next: () => {
 
-        this.snackBar.open(
-          'Pessoa atualizada com sucesso!',
-          'Fechar',
-          {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            panelClass: ['success-snackbar']
-          }
-        );
+          this.snackBar.open(
+            'Pessoa atualizada com sucesso!',
+            'Fechar',
+            {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              panelClass: ['success-snackbar']
+            }
+          );
 
-        this.router.navigate([
-          '/person',
-          id
-        ]);
+          this.router.navigate([
+            '/person',
+            id
+          ]);
+        },
 
-      },
+        error: error => {
 
-      error: error => {
+          console.error(
+            'Erro ao atualizar pessoa:',
+            error
+          );
 
-        console.error(
-          'Erro ao atualizar pessoa:',
-          error
-        );
-
-        this.showError(
-          this.getErrorMessage(
-            error,
-            'Não foi possível atualizar a pessoa.'
-          )
-        );
-
-      }
-
-    });
+          this.showError(
+            this.getErrorMessage(
+              error,
+              'Não foi possível atualizar a pessoa.'
+            )
+          );
+        }
+      });
   }
 
   private getErrorMessage(
@@ -479,29 +485,35 @@ export class PersonFormComponent implements OnInit {
   ): string {
 
     if (error?.error?.message) {
+
       return error.error.message;
     }
 
     if (error?.error?.errors) {
 
-      const errors = error.error.errors;
+      const errors =
+        error.error.errors;
 
-      const messages = Object.values(errors)
-        .flat()
-        .filter(
-          message => typeof message === 'string'
-        );
+      const messages =
+        Object.values(errors)
+          .flat()
+          .filter(
+            message =>
+              typeof message === 'string'
+          );
 
       if (messages.length > 0) {
+
         return messages[0] as string;
       }
-
     }
 
     return defaultMessage;
   }
 
-  private showError(message: string): void {
+  private showError(
+    message: string
+  ): void {
 
     this.snackBar.open(
       message,
@@ -513,7 +525,5 @@ export class PersonFormComponent implements OnInit {
         panelClass: ['error-snackbar']
       }
     );
-
   }
-
 }

@@ -14,47 +14,66 @@
         <div class="form-grid">
 
           <mat-form-field appearance="outline">
+
             <mat-label>Nome</mat-label>
 
             <input
               matInput
-              formControlName="name">
+              formControlName="name"
+              maxlength="150">
 
             @if (form.controls.name.hasError('required')) {
+
               <mat-error>
                 Nome é obrigatório
               </mat-error>
+
+            }
+
+            @if (form.controls.name.hasError('maxlength')) {
+
+              <mat-error>
+                Nome deve possuir no máximo 150 caracteres
+              </mat-error>
+
             }
 
           </mat-form-field>
 
 
           <mat-form-field appearance="outline">
+
             <mat-label>CPF</mat-label>
 
             <input
               matInput
               formControlName="cpf"
               maxlength="14"
+              inputmode="numeric"
               placeholder="000.000.000-00"
               (input)="formatCpfInput($event)">
 
             @if (form.controls.cpf.hasError('required')) {
+
               <mat-error>
                 CPF é obrigatório
               </mat-error>
+
             }
 
             @if (form.controls.cpf.hasError('pattern')) {
+
               <mat-error>
                 CPF deve conter 11 dígitos
               </mat-error>
+
             }
 
           </mat-form-field>
 
 
           <mat-form-field appearance="outline">
+
             <mat-label>Data de nascimento</mat-label>
 
             <input
@@ -65,15 +84,19 @@
               [max]="maxBirthDate">
 
             @if (form.controls.birthDate.hasError('required')) {
+
               <mat-error>
                 Data de nascimento é obrigatória
               </mat-error>
+
             }
 
             @if (form.controls.birthDate.hasError('pattern')) {
+
               <mat-error>
                 Informe uma data válida
               </mat-error>
+
             }
 
           </mat-form-field>
@@ -93,8 +116,15 @@
         <div class="section-header">
 
           <div>
-            <mat-card-title>Telefones</mat-card-title>
-            <p>Adicione os telefones da pessoa</p>
+
+            <mat-card-title>
+              Telefones
+            </mat-card-title>
+
+            <p>
+              Adicione os telefones da pessoa
+            </p>
+
           </div>
 
           <button
@@ -102,7 +132,10 @@
             type="button"
             (click)="addPhone()">
 
-            <mat-icon>add</mat-icon>
+            <mat-icon>
+              add
+            </mat-icon>
+
             Adicionar telefone
 
           </button>
@@ -116,7 +149,11 @@
 
         <div formArrayName="phones">
 
-          @for (phone of phones.controls; track $index; let i = $index) {
+          @for (
+            phone of phones.controls;
+            track $index;
+            let i = $index
+          ) {
 
             <div
               class="phone-row"
@@ -124,24 +161,36 @@
 
               <mat-form-field appearance="outline">
 
-                <mat-label>Tipo</mat-label>
+                <mat-label>
+                  Tipo
+                </mat-label>
 
                 <mat-select formControlName="type">
 
-                  @for (phoneType of phoneTypes; track phoneType.value) {
+                  @for (
+                    phoneType of phoneTypes;
+                    track phoneType.value
+                  ) {
 
-                    <mat-option [value]="phoneType.value">
+                    <mat-option
+                      [value]="phoneType.value">
+
                       {{ phoneType.label }}
+
                     </mat-option>
 
                   }
 
                 </mat-select>
 
-                @if (phone.get('type')?.hasError('required')) {
+                @if (
+                  phone.get('type')?.hasError('required')
+                ) {
+
                   <mat-error>
                     Tipo é obrigatório
                   </mat-error>
+
                 }
 
               </mat-form-field>
@@ -151,25 +200,36 @@
                 appearance="outline"
                 class="phone-number">
 
-                <mat-label>Número</mat-label>
+                <mat-label>
+                  Número
+                </mat-label>
 
                 <input
                   matInput
                   formControlName="number"
                   maxlength="15"
+                  inputmode="numeric"
                   placeholder="(41) 98888-7777"
                   (input)="formatPhoneInput($event, i)">
 
-                @if (phone.get('number')?.hasError('required')) {
+                @if (
+                  phone.get('number')?.hasError('required')
+                ) {
+
                   <mat-error>
                     Número é obrigatório
                   </mat-error>
+
                 }
 
-                @if (phone.get('number')?.hasError('pattern')) {
+                @if (
+                  phone.get('number')?.hasError('pattern')
+                ) {
+
                   <mat-error>
                     Informe um telefone válido
                   </mat-error>
+
                 }
 
               </mat-form-field>
@@ -182,7 +242,9 @@
                 aria-label="Remover telefone"
                 (click)="removePhone(i)">
 
-                <mat-icon>delete</mat-icon>
+                <mat-icon>
+                  delete
+                </mat-icon>
 
               </button>
 
@@ -190,11 +252,19 @@
 
           }
 
+
           @if (phones.length === 0) {
 
             <div class="empty-phones">
-              <mat-icon>phone</mat-icon>
-              <span>Nenhum telefone adicionado.</span>
+
+              <mat-icon>
+                phone
+              </mat-icon>
+
+              <span>
+                Nenhum telefone adicionado.
+              </span>
+
             </div>
 
           }

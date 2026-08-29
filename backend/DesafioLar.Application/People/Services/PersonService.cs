@@ -51,11 +51,25 @@ namespace DesafioLar.Application.People.Services
                 : MapToResponse(person);
         }
 
-        public async Task<IEnumerable<PersonResponse>> GetAllAsync()
+        public async Task<PagedResult<PersonResponse>> GetAllAsync(
+            string? name,
+            int page,
+            int pageSize)
         {
-            var people = await _personRepository.GetAllAsync();
+            var people = await _personRepository.GetAllAsync(
+                name,
+                page,
+                pageSize);
 
-            return people.Select(MapToResponse);
+            var totalItems = await _personRepository.CountAsync(name);
+
+            return new PagedResult<PersonResponse>
+            {
+                Items = people.Select(MapToResponse),
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
         }
 
         public async Task<PersonResponse?> UpdateAsync(

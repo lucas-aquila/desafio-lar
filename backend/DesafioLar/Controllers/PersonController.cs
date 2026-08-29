@@ -38,9 +38,31 @@ namespace DesafioLar.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(
+            [FromQuery] string? name = null,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var people = await _personService.GetAllAsync();
+            if (page < 1)
+            {
+                return BadRequest(new
+                {
+                    message = "A página deve ser maior ou igual a 1."
+                });
+            }
+
+            if (pageSize < 1 || pageSize > 100)
+            {
+                return BadRequest(new
+                {
+                    message = "O tamanho da página deve estar entre 1 e 100."
+                });
+            }
+
+            var people = await _personService.GetAllAsync(
+                name,
+                page,
+                pageSize);
 
             return Ok(people);
         }
