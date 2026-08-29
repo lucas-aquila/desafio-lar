@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "start:backend": "dotnet run --project ../../backend/DesafioLar/DesafioLar.csproj --launch-profile https",
+    "start:backend": "dotnet run --project ../../backend/DesafioLar/DesafioLar.csproj --urls http://localhost:5276",
     "start:all": "concurrently \"npm run start\" \"npm run start:backend\""
   },
   "private": true,

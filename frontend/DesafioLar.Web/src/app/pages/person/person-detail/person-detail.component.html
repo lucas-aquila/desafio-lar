@@ -31,13 +31,19 @@
 
           <div class="detail-item">
             <span class="label">Nome</span>
-            <span class="value">{{ person.name }}</span>
+            <span class="value">
+              {{ person.name }}
+            </span>
           </div>
+
 
           <div class="detail-item">
             <span class="label">CPF</span>
-            <span class="value">{{ person.cpf }}</span>
+            <span class="value">
+              {{ formatCpf(person.cpf) }}
+            </span>
           </div>
+
 
           <div class="detail-item">
             <span class="label">Data de nascimento</span>
@@ -45,6 +51,7 @@
               {{ person.birthDate | date:'dd/MM/yyyy' }}
             </span>
           </div>
+
 
           <div class="detail-item">
             <span class="label">Status</span>
@@ -114,6 +121,7 @@
 
       </button>
 
+
       <button
         mat-stroked-button
         type="button"
@@ -123,6 +131,7 @@
         Editar
 
       </button>
+
 
       <button
         mat-flat-button

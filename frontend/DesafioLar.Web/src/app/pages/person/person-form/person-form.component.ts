@@ -24,15 +24,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+
 import {
   MatSnackBar,
   MatSnackBarModule
 } from '@angular/material/snack-bar';
+
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
 import { PersonService } from '../../../services/person.service';
 import { PhoneType } from '../../../models/person';
+
 import {
   RequestPerson,
   RequestPhone
@@ -85,10 +88,32 @@ export class PersonFormComponent implements OnInit {
     }
   ];
 
+  readonly minBirthDate = '1900-01-01';
+  readonly maxBirthDate = this.getToday();
+
   readonly form = this.formBuilder.nonNullable.group({
-    name: ['', Validators.required],
-    cpf: ['', Validators.required],
-    birthDate: ['', Validators.required],
+
+    name: [
+      '',
+      Validators.required
+    ],
+
+    cpf: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/)
+      ]
+    ],
+
+    birthDate: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)
+      ]
+    ],
+
     phones: this.formBuilder.array<PhoneForm>([])
   });
 
@@ -122,14 +147,20 @@ export class PersonFormComponent implements OnInit {
   ): PhoneForm {
 
     return this.formBuilder.nonNullable.group({
+
       type: [
         type,
         Validators.required
       ],
+
       number: [
         number,
-        Validators.required
+        [
+          Validators.required,
+          Validators.pattern(/^\(\d{2}\) \d{4,5}-\d{4}$/)
+        ]
       ]
+
     });
   }
 
@@ -140,9 +171,13 @@ export class PersonFormComponent implements OnInit {
       next: person => {
 
         this.form.patchValue({
+
           name: person.name,
-          cpf: person.cpf,
+
+          cpf: this.formatCpf(person.cpf),
+
           birthDate: person.birthDate
+
         });
 
         this.phones.clear();
@@ -150,13 +185,16 @@ export class PersonFormComponent implements OnInit {
         person.phones.forEach(phone => {
 
           this.phones.push(
+
             this.createPhone(
               phone.type,
-              phone.number
+              this.formatPhone(phone.number)
             )
+
           );
 
         });
+
       },
 
       error: error => {
@@ -178,7 +216,9 @@ export class PersonFormComponent implements OnInit {
         );
 
         this.router.navigate(['/person']);
+
       }
+
     });
   }
 
@@ -187,11 +227,118 @@ export class PersonFormComponent implements OnInit {
     this.phones.push(
       this.createPhone()
     );
+
   }
 
   removePhone(index: number): void {
 
     this.phones.removeAt(index);
+
+  }
+
+  formatCpfInput(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    const formattedCpf = this.formatCpf(input.value);
+
+    input.value = formattedCpf;
+
+    this.form.controls.cpf.setValue(
+      formattedCpf
+    );
+
+  }
+
+  private formatCpf(cpf: string): string {
+
+    const value = cpf
+      .replace(/\D/g, '')
+      .substring(0, 11);
+
+    if (value.length <= 3) {
+      return value;
+    }
+
+    if (value.length <= 6) {
+
+      return `${value.substring(0, 3)}.${value.substring(3)}`;
+
+    }
+
+    if (value.length <= 9) {
+
+      return `${value.substring(0, 3)}.${value.substring(3, 6)}.${value.substring(6)}`;
+
+    }
+
+    return `${value.substring(0, 3)}.${value.substring(3, 6)}.${value.substring(6, 9)}-${value.substring(9)}`;
+
+  }
+
+  formatPhoneInput(
+    event: Event,
+    index: number
+  ): void {
+
+    const input = event.target as HTMLInputElement;
+
+    const formattedPhone = this.formatPhone(
+      input.value
+    );
+
+    input.value = formattedPhone;
+
+    this.phones
+      .at(index)
+      .controls
+      .number
+      .setValue(formattedPhone);
+
+  }
+
+  private formatPhone(phone: string): string {
+
+    const value = phone
+      .replace(/\D/g, '')
+      .substring(0, 11);
+
+    if (value.length <= 2) {
+      return value;
+    }
+
+    if (value.length <= 6) {
+
+      return `(${value.substring(0, 2)}) ${value.substring(2)}`;
+
+    }
+
+    if (value.length <= 10) {
+
+      return `(${value.substring(0, 2)}) ${value.substring(2, 6)}-${value.substring(6)}`;
+
+    }
+
+    return `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7)}`;
+
+  }
+
+  private getToday(): string {
+
+    const today = new Date();
+
+    const year = today.getFullYear();
+
+    const month = String(
+      today.getMonth() + 1
+    ).padStart(2, '0');
+
+    const day = String(
+      today.getDate()
+    ).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+
   }
 
   save(): void {
@@ -199,26 +346,38 @@ export class PersonFormComponent implements OnInit {
     if (this.form.invalid) {
 
       this.form.markAllAsTouched();
+
       return;
     }
 
     const formValue = this.form.getRawValue();
 
     const data: RequestPerson = {
+
       name: formValue.name,
-      cpf: formValue.cpf,
+
+      cpf: formValue.cpf.replace(/\D/g, ''),
+
       birthDate: formValue.birthDate,
+
       phones: formValue.phones.map(
+
         (phone): RequestPhone => ({
+
           type: phone.type,
-          number: phone.number
+
+          number: phone.number.replace(/\D/g, '')
+
         })
+
       )
+
     };
 
     if (this.isEditMode()) {
 
       this.update(data);
+
       return;
     }
 
@@ -243,6 +402,7 @@ export class PersonFormComponent implements OnInit {
         );
 
         this.router.navigate(['/person']);
+
       },
 
       error: error => {
@@ -258,7 +418,9 @@ export class PersonFormComponent implements OnInit {
             'Não foi possível cadastrar a pessoa.'
           )
         );
+
       }
+
     });
   }
 
@@ -289,6 +451,7 @@ export class PersonFormComponent implements OnInit {
           '/person',
           id
         ]);
+
       },
 
       error: error => {
@@ -304,7 +467,9 @@ export class PersonFormComponent implements OnInit {
             'Não foi possível atualizar a pessoa.'
           )
         );
+
       }
+
     });
   }
 
@@ -323,11 +488,14 @@ export class PersonFormComponent implements OnInit {
 
       const messages = Object.values(errors)
         .flat()
-        .filter(message => typeof message === 'string');
+        .filter(
+          message => typeof message === 'string'
+        );
 
       if (messages.length > 0) {
         return messages[0] as string;
       }
+
     }
 
     return defaultMessage;
@@ -345,5 +513,7 @@ export class PersonFormComponent implements OnInit {
         panelClass: ['error-snackbar']
       }
     );
+
   }
+
 }

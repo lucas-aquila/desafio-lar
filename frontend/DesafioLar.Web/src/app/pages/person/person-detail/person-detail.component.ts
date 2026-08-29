@@ -14,19 +14,25 @@ import {
 import { DatePipe } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
+
 import {
   MatDialog,
   MatDialogModule
 } from '@angular/material/dialog';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+
 import {
   MatSnackBar,
   MatSnackBarModule
 } from '@angular/material/snack-bar';
 
 import { PersonService } from '../../../services/person.service';
-import { Person, PhoneType } from '../../../models/person';
+import {
+  Person,
+  PhoneType
+} from '../../../models/person';
 
 import {
   ConfirmDialogComponent
@@ -179,6 +185,27 @@ export class PersonDetailComponent implements OnInit {
     });
   }
 
+  formatCpf(cpf: string): string {
+
+    const value = cpf
+      .replace(/\D/g, '')
+      .substring(0, 11);
+
+    if (value.length <= 3) {
+      return value;
+    }
+
+    if (value.length <= 6) {
+      return `${value.substring(0, 3)}.${value.substring(3)}`;
+    }
+
+    if (value.length <= 9) {
+      return `${value.substring(0, 3)}.${value.substring(3, 6)}.${value.substring(6)}`;
+    }
+
+    return `${value.substring(0, 3)}.${value.substring(3, 6)}.${value.substring(6, 9)}-${value.substring(9)}`;
+  }
+
   getPhoneTypeLabel(type: PhoneType): string {
 
     switch (type) {
@@ -199,12 +226,14 @@ export class PersonDetailComponent implements OnInit {
 
   formatPhoneNumber(number: string): string {
 
-    if (number.length === 11) {
-      return `(${number.substring(0, 2)}) ${number.substring(2, 7)}-${number.substring(7)}`;
+    const value = number.replace(/\D/g, '');
+
+    if (value.length === 11) {
+      return `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7)}`;
     }
 
-    if (number.length === 10) {
-      return `(${number.substring(0, 2)}) ${number.substring(2, 6)}-${number.substring(6)}`;
+    if (value.length === 10) {
+      return `(${value.substring(0, 2)}) ${value.substring(2, 6)}-${value.substring(6)}`;
     }
 
     return number;

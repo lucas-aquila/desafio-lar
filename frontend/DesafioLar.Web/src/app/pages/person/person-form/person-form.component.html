@@ -34,11 +34,20 @@
 
             <input
               matInput
-              formControlName="cpf">
+              formControlName="cpf"
+              maxlength="14"
+              placeholder="000.000.000-00"
+              (input)="formatCpfInput($event)">
 
             @if (form.controls.cpf.hasError('required')) {
               <mat-error>
                 CPF é obrigatório
+              </mat-error>
+            }
+
+            @if (form.controls.cpf.hasError('pattern')) {
+              <mat-error>
+                CPF deve conter 11 dígitos
               </mat-error>
             }
 
@@ -51,11 +60,19 @@
             <input
               matInput
               type="date"
-              formControlName="birthDate">
+              formControlName="birthDate"
+              [min]="minBirthDate"
+              [max]="maxBirthDate">
 
             @if (form.controls.birthDate.hasError('required')) {
               <mat-error>
                 Data de nascimento é obrigatória
+              </mat-error>
+            }
+
+            @if (form.controls.birthDate.hasError('pattern')) {
+              <mat-error>
+                Informe uma data válida
               </mat-error>
             }
 
@@ -121,6 +138,12 @@
 
                 </mat-select>
 
+                @if (phone.get('type')?.hasError('required')) {
+                  <mat-error>
+                    Tipo é obrigatório
+                  </mat-error>
+                }
+
               </mat-form-field>
 
 
@@ -133,11 +156,19 @@
                 <input
                   matInput
                   formControlName="number"
-                  placeholder="Ex.: (41) 98888-7777">
+                  maxlength="15"
+                  placeholder="(41) 98888-7777"
+                  (input)="formatPhoneInput($event, i)">
 
                 @if (phone.get('number')?.hasError('required')) {
                   <mat-error>
                     Número é obrigatório
+                  </mat-error>
+                }
+
+                @if (phone.get('number')?.hasError('pattern')) {
+                  <mat-error>
+                    Informe um telefone válido
                   </mat-error>
                 }
 

@@ -7,11 +7,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarModule
+} from '@angular/material/snack-bar';
 
 import { PersonService } from '../../../services/person.service';
 import { Person } from '../../../models/person';
-import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import {
+  ConfirmDialogComponent
+} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-person-list',
@@ -62,6 +67,27 @@ export class PersonListComponent implements OnInit {
         );
       }
     });
+  }
+
+  formatCpf(cpf: string): string {
+
+    const value = cpf
+      .replace(/\D/g, '')
+      .substring(0, 11);
+
+    if (value.length <= 3) {
+      return value;
+    }
+
+    if (value.length <= 6) {
+      return `${value.substring(0, 3)}.${value.substring(3)}`;
+    }
+
+    if (value.length <= 9) {
+      return `${value.substring(0, 3)}.${value.substring(3, 6)}.${value.substring(6)}`;
+    }
+
+    return `${value.substring(0, 3)}.${value.substring(3, 6)}.${value.substring(6, 9)}-${value.substring(9)}`;
   }
 
   remove(person: Person): void {
