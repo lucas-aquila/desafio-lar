@@ -4,11 +4,21 @@ Aplicação desenvolvida como parte do desafio técnico da Lar.
 
 O projeto consiste em uma aplicação para gerenciamento de pessoas e seus respectivos telefones, permitindo realizar operações de cadastro, consulta, atualização e exclusão.
 
-O backend foi desenvolvido utilizando **.NET 10 / ASP.NET Core Web API**, com **Entity Framework Core** para persistência dos dados e **PostgreSQL** como banco de dados.
+O projeto está organizado em dois módulos principais:
 
-O frontend foi desenvolvido utilizando **Angular** e **Angular Material**.
+- **Frontend:** desenvolvido em **Angular** e **Angular Material**, localizado em `frontend/DesafioLar.Web`.
+- **Backend:** desenvolvido em **.NET 10 / ASP.NET Core Web API**, localizado em `backend/`, sendo dividido em projetos de acordo com os princípios da **Clean Architecture**.
 
-A aplicação segue uma organização baseada em **Clean Architecture**, utilizando princípios de **DDD** e **SOLID**, com separação entre domínio, aplicação, infraestrutura e apresentação.
+O backend utiliza **Entity Framework Core** para persistência dos dados e **PostgreSQL** como banco de dados.
+
+A estrutura do backend está organizada da seguinte forma:
+
+- `DesafioLar` — camada de apresentação, responsável pela API, Controllers e configuração da aplicação.
+- `DesafioLar.Application` — camada de aplicação, responsável pelos casos de uso, serviços, DTOs e interfaces.
+- `DesafioLar.Domain` — camada de domínio, responsável pelas entidades, enums e regras de negócio.
+- `DesafioLar.Infrastructure` — camada de infraestrutura, responsável pela persistência, Entity Framework Core e implementação dos repositórios.
+
+A aplicação segue uma organização baseada em **Clean Architecture**, utilizando princípios de **DDD** e **SOLID**, mantendo as responsabilidades separadas entre apresentação, aplicação, domínio e infraestrutura.
 
 ## Tecnologias
 
